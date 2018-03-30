@@ -1,3 +1,3 @@
-# skin-shaders
+# skin-hair-shaders
 
-Unity skin shaders, moved from Whodunnit project into their own repository to use as a submodule.
+Unity skin and hair shaders, moved from Whodunnit project into their own repository to use as a submodule.
