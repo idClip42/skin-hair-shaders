@@ -1,5 +1,3 @@
-// Upgrade NOTE: upgraded instancing buffer 'Props' to new syntax.
-
 Shader "Skin/Skin V2" {
 	Properties {
 		_Color ("Color", Color) = (0.8,0.8,0.8,1)
@@ -46,9 +44,6 @@ Shader "Skin/Skin V2" {
 		half _SSSDist;
 		half _DetailNormalMapIntensity;
 		half _DetailNormalMapStrength;
-
-		UNITY_INSTANCING_BUFFER_START(Props)
-		UNITY_INSTANCING_BUFFER_END(Props)
 
 		half4 LightingSSS (SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
 		{
