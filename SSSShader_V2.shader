@@ -1,16 +1,25 @@
 Shader "Skin/Skin V2" {
 	Properties {
+		[Header(Main Textures)]
 		_Color ("Color", Color) = (0.8,0.8,0.8,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_NormalTex ("Normal Map", 2D) = "bump" {}
+
+		[Space]
+		[Header(Specularity)]
 		_SpecPower  ("Specular Power", Float) = 10
-//		_SpecularColor ("Specular Color", Color) = (0.3,0.3,0.3,1)
 		_SpecularValue("Specular Value", Range(0,1)) = 1.0
+
+		[Space]
+		[Header(Subsurface Scattering)]
 		[HDR] _SSSColor ("SSS Color", Color) = (1,0,0,1)
 		_SSSPower ("SSS Power", Float) = 1
 		_SSSAmb ("SSS Ambient", Float) = 0.25
 		_SSSDist ("SSS Distortion", Float) = 0.5
 		_SSSTex ("SSS Map", 2D) = "white" {}
+
+		[Space]
+		[Header(Details)]
 		_DetailNormalTex ("Detail Normal Map", 2D) = "bump" {}
 		_DetailNormalMapIntensity ("Detail Normal Map Intensity", Range(-10,10)) = 1
 		_DetailNormalMapStrength ("Detail Normal Map Strength", Range(0,1)) = 0.5
