@@ -5,11 +5,11 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Cutoff ("Cutoff", range(0,1)) = 0.5
 		[Toggle] _Dither("Dither", Float) = 0
-
-		[Space]
-		[Header(Translucency)]
-		_TranslucencyColor ("Translucency Color", Color) = (1,1,1,1)
-		_TranslucencyPower ("Translucency Power", Float) = 2
+//
+//		[Space]
+//		[Header(Translucency)]
+//		_TranslucencyColor ("Translucency Color", Color) = (1,1,1,1)
+//		_TranslucencyPower ("Translucency Power", Float) = 2
 
 		[Space]
 		[Header(Specularity)]
@@ -31,7 +31,7 @@
 		#pragma surface surf Anisotropic addshadow fullforwardshadows
 		#pragma target 3.0
 		#pragma shader_feature _DITHER_ON
-		#include "Translucency.cginc"
+//		#include "Translucency.cginc"
 
 
 		struct Input {
@@ -54,8 +54,8 @@
 		fixed4 _Color;
 		fixed _Cutoff;
 
-		fixed4 _TranslucencyColor;
-		half _TranslucencyPower;
+//		fixed4 _TranslucencyColor;
+//		half _TranslucencyPower;
 
 		float4 _SpecularColor;
 		float _Specular;
@@ -65,18 +65,21 @@
 
 		fixed4 LightingAnisotropic(SurfaceAnisoOutput s, fixed3 lightDir, half3 viewDir, fixed atten)
 		{
-			float NdotL = abs(dot(s.Normal, lightDir));
-			half trans = Translucency(s.Normal, lightDir, viewDir, atten, _TranslucencyPower, 0.25, 0.5, 1);
+//			float NdotL = abs(dot(s.Normal, lightDir));
+			float NdotL = 1;
+//			float NdotL = 1 - abs(dot(s.AnisoDirection, lightDir));
+//			half trans = Translucency(s.Normal, lightDir, viewDir, atten, _TranslucencyPower, 0.25, 0.5, 1);
 
 			fixed3 halfVector = normalize(normalize(lightDir) + normalize(viewDir));
 			fixed HdotA = dot(normalize(s.Normal + s.AnisoDirection), halfVector);
 			float aniso = max(0, sin(radians((HdotA + _AnisoOffset) * 180)));
+//			float NdotL = 1 - abs(dot(aniso
 			float spec = saturate(pow(aniso, _SpecPower * 128) * _Specular);
 
 			fixed4 c;
-			c.rgb = s.Albedo * _LightColor0.rgb * atten * (
+			c.rgb = s.Albedo * _LightColor0.rgb * atten * //(
 				NdotL +
-				trans * _TranslucencyColor.rgb) +
+//				trans * _TranslucencyColor.rgb) +
 				_SpecularColor.rgb * spec * atten;
 			c.a = s.Alpha;
 
@@ -109,7 +112,6 @@
 			#else
 				clip(o.Alpha - _Cutoff);
 			#endif
-
 
 			float3 anisoTex = UnpackNormal(tex2D(_AnisoDir, IN.uv_AnisoDir));
 			o.AnisoDirection = anisoTex;
