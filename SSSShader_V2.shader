@@ -21,8 +21,8 @@ Shader "Skin/Skin V2" {
 		[Space]
 		[Header(Details)]
 		_DetailNormalTex ("Detail Normal Map", 2D) = "bump" {}
-		_DetailNormalMapIntensity ("Detail Normal Map Intensity", Range(-10,10)) = 1
-		_DetailNormalMapStrength ("Detail Normal Map Strength", Range(0,1)) = 0.5
+		_DetailNormalMapIntensity ("Detail Normal Map Intensity", Range(-2,2)) = 1
+//		_DetailNormalMapStrength ("Detail Normal Map Strength", Range(0,1)) = 0.5
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -52,7 +52,7 @@ Shader "Skin/Skin V2" {
 		half _SSSAmb;
 		half _SSSDist;
 		half _DetailNormalMapIntensity;
-		half _DetailNormalMapStrength;
+//		half _DetailNormalMapStrength;
 
 		half4 LightingSSS (SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
 		{
@@ -86,7 +86,8 @@ Shader "Skin/Skin V2" {
 			fixed3 nD = UnpackNormal(tex2D(_DetailNormalTex, IN.uv_DetailNormalTex));
 			nD.x *= _DetailNormalMapIntensity;
 			nD.y *= _DetailNormalMapIntensity;
-			o.Normal = normalize(lerp(n, nD, _DetailNormalMapStrength));
+//			o.Normal = normalize(lerp(n, nD, _DetailNormalMapStrength));
+			o.Normal = normalize(n + nD);
 
 		}
 		ENDCG
