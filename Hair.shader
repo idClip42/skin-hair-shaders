@@ -97,8 +97,11 @@
 				clip(o.Alpha - _Cutoff);
 			#endif
 
-			float3 anisoTex = UnpackNormal(tex2D(_AnisoDir, IN.uv_AnisoDir));
+//			float3 anisoTex = UnpackNormal(tex2D(_AnisoDir, IN.uv_AnisoDir));
+			float3 anisoTex = tex2D(_AnisoDir, IN.uv_AnisoDir);
 			o.AnisoDirection = anisoTex;
+			o.AnisoDirection -= 0.5f;
+			o.AnisoDirection *= 2;
 			o.Normal = anisoTex;
 		}
 		ENDCG
