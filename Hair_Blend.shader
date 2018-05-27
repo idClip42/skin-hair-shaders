@@ -1,4 +1,4 @@
-﻿Shader "Hair/Hair" {
+﻿Shader "Hair/Hair_Blend" {
 	Properties {
 		[Header(Main Textures)]
 		_Color ("Color", Color) = (1,1,1,1)
@@ -22,22 +22,62 @@
 		Cull Off
 		
 		CGPROGRAM
-		#pragma surface surf Anisotropic addshadow fullforwardshadows
+		#pragma surface surf Anisotropic alphatest:_Cutoff addshadow fullforwardshadows
 		#pragma target 3.0
-		#pragma shader_feature _DITHER_ON
 
 
 		struct Input {
 			float2 uv_MainTex;
 			float2 uv_AnisoDir;
-			float4 screenPos;
 		};
 
 		struct SurfaceAnisoOutput
 		{
 			fixed3 Albedo;
 //			fixed3 AnisoDirection;
+			fixed3 Normal;
+			fixed3 Emission;
+			fixed Alpha;
+		};
 
+		sampler2D _MainTex;
+		fixed4 _Color;
+
+		float4 _SpecularColor;
+		float _Specular;
+		float _SpecPower;
+		sampler2D _AnisoDir;
+		float _AnisoOffset;
+
+		#include "AnisoLighting.cginc"
+	
+		void surf (Input IN, inout SurfaceAnisoOutput o) {
+			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+			o.Albedo = c.rgb;
+			o.Alpha = c.a;
+
+			float3 anisoTex = tex2D(_AnisoDir, IN.uv_AnisoDir);
+			o.Normal = anisoTex;
+			o.Normal -= 0.5f;
+			o.Normal *= 2;
+//			o.Normal = anisoTex;
+		}
+		ENDCG
+
+		CGPROGRAM
+		#pragma surface surf Anisotropic alpha:blend fullforwardshadows
+		#pragma target 3.0
+
+
+		struct Input {
+			float2 uv_MainTex;
+			float2 uv_AnisoDir;
+		};
+
+		struct SurfaceAnisoOutput
+		{
+			fixed3 Albedo;
+//			fixed3 AnisoDirection;
 			fixed3 Normal;
 			fixed3 Emission;
 			fixed Alpha;
@@ -54,45 +94,25 @@
 		float _AnisoOffset;
 
 		#include "AnisoLighting.cginc"
-	
+
 		void surf (Input IN, inout SurfaceAnisoOutput o) {
+
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
-			o.Alpha = c.a;
-
-			#ifdef _DITHER_ON
-				half alpha = saturate(c.a/_Cutoff);
-
-				float4x4 thresholdMatrix =
-	   			{  1.0 / 17.0,  9.0 / 17.0,  3.0 / 17.0, 11.0 / 17.0,
-	   			  13.0 / 17.0,  5.0 / 17.0, 15.0 / 17.0,  7.0 / 17.0,
-	   			   4.0 / 17.0, 12.0 / 17.0,  2.0 / 17.0, 10.0 / 17.0,
-	   			  16.0 / 17.0,  8.0 / 17.0, 14.0 / 17.0,  6.0 / 17.0
-	   			};
-
-	   			float4x4 _RowAccess = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 };
-
-	   			float2 pos = IN.screenPos.xy / IN.screenPos.w;
-
-	   			pos *= _ScreenParams.xy;
-
-	   			clip(alpha - thresholdMatrix[fmod(pos.x, 4)] * _RowAccess[fmod(pos.y, 4)]);
-					
-			#else
-				clip(o.Alpha - _Cutoff);
-			#endif
 
 			float3 anisoTex = tex2D(_AnisoDir, IN.uv_AnisoDir);
-//			o.AnisoDirection = anisoTex;
-//			o.AnisoDirection -= 0.5f;
-//			o.AnisoDirection *= 2;
 			o.Normal = anisoTex;
 			o.Normal -= 0.5f;
 			o.Normal *= 2;
 //			o.Normal = anisoTex;
-//			o.Normal = o.AnisoDirection;
+
+			c.a = c.a / _Cutoff;
+			clip(-c.a + 1);
+			o.Alpha = c.a;
 		}
 		ENDCG
+
+
 	}
 	FallBack "Diffuse"
 }
