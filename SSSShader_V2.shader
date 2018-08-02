@@ -17,6 +17,8 @@ Shader "Skin/Skin V2" {
 		_SSSAmb ("SSS Ambient", Float) = 0.25
 		_SSSDist ("SSS Distortion", Float) = 0.5
 		_SSSTex ("SSS Map", 2D) = "white" {}
+		_SSSEdgeValue("SSS Value", Range(0,1)) = 1.0
+		_SSSEdgePower("SSS Power", Float) = 2.0
 
 		[Space]
 		[Header(Details)]
@@ -51,6 +53,8 @@ Shader "Skin/Skin V2" {
 		half _SSSPower;
 		half _SSSAmb;
 		half _SSSDist;
+		half _SSSEdgeValue;
+		half _SSSEdgePower;
 		half _DetailNormalMapIntensity;
 //		half _DetailNormalMapStrength;
 
@@ -64,12 +68,13 @@ Shader "Skin/Skin V2" {
 
 
 			half translucency = Translucency(s.Normal, lightDir, viewDir, atten, _SSSPower, _SSSAmb, _SSSDist, s.Alpha);
-
+			half sss = _SSSEdgeValue * pow(saturate(1 - abs(NdotL) - 0.5f), _SSSEdgePower);
 
 		 	half4 c;
 		 	c.rgb = s.Albedo * _LightColor0.rgb * (
 		 		finalSpec * atten + 
 				saturate(NdotL) * atten 
+				+ sss * _SSSColor * atten * s.Alpha
 				+ translucency * _SSSColor
 				);
 			return c;
