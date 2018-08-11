@@ -80,6 +80,7 @@ Shader "Skin/Skin V3" {
 				+ sss * _SSSColor * atten * s.Alpha
 				+ translucency * _SSSColor
 				);
+			c.a = 1;
 			return c;
 		}
 

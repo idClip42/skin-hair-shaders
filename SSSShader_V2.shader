@@ -87,6 +87,7 @@ Shader "Skin/Skin V2" {
 				// + sss * _SSSColor * atten * s.Alpha
 				+ translucency * _SSSColor
 				);
+			c.a = 1;
 			return c;
 		}
 

@@ -62,7 +62,7 @@ Shader "Skin/Skin" {
 				saturate(NdotL) * atten * 1 +
 				sss * _SSSColor * atten + 
 				translucency * _SSSColor * atten);
-
+			c.a = 1;
 			return c;
 		}
 
