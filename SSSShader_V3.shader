@@ -1,4 +1,6 @@
-Shader "Skin/Skin V2" {
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Skin/Skin V3" {
 	Properties {
 		[Header(Main Textures)]
 		_Color ("Color", Color) = (0.8,0.8,0.8,1)
@@ -19,8 +21,6 @@ Shader "Skin/Skin V2" {
 		_SSSTex ("SSS Map", 2D) = "white" {}
 		_SSSEdgeValue("SSS Value", Range(0,1)) = 1.0
 		_SSSEdgePower("SSS Power", Float) = 2.0
-		_SSSProfile ("SSS Profile", 2D) = "black" {}
-		_SSSProfileStrength("SSS Profile Strength", Range(0,1)) = 0.0
 
 		[Space]
 		[Header(Details)]
@@ -29,10 +29,11 @@ Shader "Skin/Skin V2" {
 //		_DetailNormalMapStrength ("Detail Normal Map Strength", Range(0,1)) = 0.5
 	}
 	SubShader {
-		Tags { "RenderType"="Opaque" }
-		LOD 200
-		
-		CGPROGRAM
+		// Pass {
+			Tags { "RenderType"="Opaque" }
+			LOD 200
+			
+			CGPROGRAM
 		#pragma surface surf SSS fullforwardshadows
 		#pragma target 3.0
 		#include "Translucency.cginc"
@@ -46,7 +47,6 @@ Shader "Skin/Skin V2" {
 		sampler2D _MainTex;
 		sampler2D _NormalTex;
 		sampler2D _SSSTex;
-		sampler2D _SSSProfile;
 		sampler2D _DetailNormalTex;
 		fixed4 _Color;
 //		fixed4 _SpecularColor;
@@ -58,7 +58,6 @@ Shader "Skin/Skin V2" {
 		half _SSSDist;
 		half _SSSEdgeValue;
 		half _SSSEdgePower;
-		half _SSSProfileStrength;
 		half _DetailNormalMapIntensity;
 //		half _DetailNormalMapStrength;
 
@@ -70,21 +69,15 @@ Shader "Skin/Skin V2" {
 			half spec = pow(max(0, dot(reflectionVector, viewDir)), _SpecPower);
 			half3 finalSpec = _SpecularValue * spec;
 
-			half3 profileSpec = tex2D (_SSSProfile, half2(spec/2, 0.5));//     (theDot/2 + .5);
-			finalSpec = lerp(finalSpec, profileSpec, _SSSProfileStrength);
-			// return half4(finalSpec, 1);
-
 
 			half translucency = Translucency(s.Normal, lightDir, viewDir, atten, _SSSPower, _SSSAmb, _SSSDist, s.Alpha);
 			half sss = _SSSEdgeValue * pow(saturate(1 - abs(NdotL) - 0.5f), _SSSEdgePower);
-
-			// NdotL = 1 - (pow(1-NdotL, 2))
 
 		 	half4 c;
 		 	c.rgb = s.Albedo * _LightColor0.rgb * (
 		 		finalSpec * atten + 
 				saturate(NdotL) * atten 
-				// + sss * _SSSColor * atten * s.Alpha
+				+ sss * _SSSColor * atten * s.Alpha
 				+ translucency * _SSSColor
 				);
 			return c;
@@ -106,6 +99,64 @@ Shader "Skin/Skin V2" {
 
 		}
 		ENDCG
+		// }
+
+	
+		GrabPass{ }
+
+
+		Pass {
+			//   Tags { }
+			// Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			#include "UnityCG.cginc"
+
+			sampler2D _GrabTexture;
+			sampler2D _SSSTex;
+			fixed4 _SSSColor;
+
+			struct vertInput{
+				float4 vertex : POSITION;
+			};
+
+			struct vertOutput{
+				float4 vertex : POSITION;
+				float4 uvgrab : TEXCOORD1;
+			};
+
+			vertOutput vert(vertInput v){
+				vertOutput o;
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.uvgrab = ComputeGrabScreenPos(o.vertex);
+				return o;
+			};
+
+			half4 frag(vertOutput i) : COLOR {
+				const half dist = 0.0005;
+				const fixed4 distVec = fixed4(dist, dist, 0, 0);
+				fixed4 baseCol = tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.uvgrab));
+
+				fixed4 finalCol = baseCol;
+				finalCol += tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.uvgrab + fixed4(dist,0,0,0)));
+				finalCol += tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.uvgrab + fixed4(-dist,0,0,0)));
+				finalCol += tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.uvgrab + fixed4(0,dist,0,0)));
+				finalCol += tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.uvgrab + fixed4(0,-dist,0,0)));
+				finalCol /= 5;
+				// finalCol = saturate(finalCol);
+				finalCol = abs(Luminance(finalCol) - 0.5);
+
+				// finalCol = abs(finalCol - tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.uvgrab + distVec)));
+
+				finalCol *= _SSSColor;
+
+				// return finalCol;
+				return baseCol + finalCol;
+			}
+
+			ENDCG
+		}
 	}
 	FallBack "Diffuse"
 }
