@@ -17,8 +17,8 @@ Shader "Skin/Skin V2" {
 		_SSSAmb ("SSS Ambient", Float) = 0.25
 		_SSSDist ("SSS Distortion", Float) = 0.5
 		_SSSTex ("SSS Map", 2D) = "white" {}
-		_SSSEdgeValue("SSS Value", Range(0,1)) = 1.0
-		_SSSEdgePower("SSS Power", Float) = 2.0
+		_SSSEdgeValue("SSS Edge Value", Range(0,1)) = 1.0
+		_SSSEdgePower("SSS Edge Power", Float) = 2.0
 		_SSSProfile ("SSS Profile", 2D) = "black" {}
 		_SSSProfileStrength("SSS Profile Strength", Range(0,1)) = 0.0
 
@@ -84,7 +84,7 @@ Shader "Skin/Skin V2" {
 		 	c.rgb = s.Albedo * _LightColor0.rgb * (
 		 		finalSpec * atten + 
 				saturate(NdotL) * atten 
-				// + sss * _SSSColor * atten * s.Alpha
+				 + sss * _SSSColor * atten// * s.Alpha
 				+ translucency * _SSSColor
 				);
 			c.a = 1;
