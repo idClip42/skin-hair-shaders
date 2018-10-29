@@ -10,23 +10,23 @@ Shader "Skin/Skin V2" {
 		_SpecPower  ("Specular Power", Float) = 10
 		_SpecularValue("Specular Value", Range(0,1)) = 1.0
 
+        [Space]
+        [Header(Details)]
+        _DetailNormalTex ("Detail Normal Map", 2D) = "bump" {}
+        _DetailNormalMapIntensity ("Detail Normal Map Intensity", Range(-2,2)) = 1
+//      _DetailNormalMapStrength ("Detail Normal Map Strength", Range(0,1)) = 0.5
+
 		[Space]
 		[Header(Subsurface Scattering)]
-		[HDR] _SSSColor ("SSS Color", Color) = (1,0,0,1)
-		_SSSPower ("SSS Power", Float) = 1
-		_SSSAmb ("SSS Ambient", Float) = 0.25
-		_SSSDist ("SSS Distortion", Float) = 0.5
-		_SSSTex ("SSS Map", 2D) = "white" {}
+		[HDR] _SSSColor ("Subsurface Color", Color) = (1,0,0,1)
+		_SSSPower ("Translucency Power", Float) = 1
+		_SSSAmb ("Translucency Ambient", Float) = 0.25
+		_SSSDist ("Translucency Distortion", Float) = 0.5
+		_SSSTex ("Translucency Map", 2D) = "white" {}
 		_SSSEdgeValue("SSS Edge Value", Range(0,1)) = 1.0
 		_SSSEdgePower("SSS Edge Power", Float) = 2.0
 		_SSSProfile ("SSS Profile", 2D) = "black" {}
 		_SSSProfileStrength("SSS Profile Strength", Range(0,1)) = 0.0
-
-		[Space]
-		[Header(Details)]
-		_DetailNormalTex ("Detail Normal Map", 2D) = "bump" {}
-		_DetailNormalMapIntensity ("Detail Normal Map Intensity", Range(-2,2)) = 1
-//		_DetailNormalMapStrength ("Detail Normal Map Strength", Range(0,1)) = 0.5
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
