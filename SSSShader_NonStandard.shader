@@ -1,4 +1,4 @@
-Shader "Skin/Skin V2" {
+Shader "Skin/Skin Shader" {
 	Properties {
 		[Header(Main Textures)]
 		_Color ("Color", Color) = (0.8,0.8,0.8,1)
@@ -8,7 +8,7 @@ Shader "Skin/Skin V2" {
 		[Space]
 		[Header(Specularity)]
 		_SpecPower  ("Specular Power", Float) = 10
-		_SpecularValue("Specular Value", Range(0,1)) = 1.0
+		_SpecularValue("Specular Value", Range(0,20)) = 1.0
 
         [Space]
         [Header(Details)]
@@ -23,6 +23,8 @@ Shader "Skin/Skin V2" {
 		_SSSAmb ("Translucency Ambient", Float) = 0.25
 		_SSSDist ("Translucency Distortion", Float) = 0.5
 		_SSSTex ("Translucency Map", 2D) = "white" {}
+        _SSSRemapBlack ("Translucency Remap Black", Range(-1,1)) = 0
+        _SSSRemapWhite ("Translucency Remap White", Range(0,2)) = 1
 		_SSSEdgeValue("SSS Edge Value", Range(0,1)) = 1.0
 		_SSSEdgePower("SSS Edge Power", Float) = 2.0
 		//_SSSProfile ("SSS Profile", 2D) = "black" {}
@@ -56,6 +58,8 @@ Shader "Skin/Skin V2" {
 		half _SSSPower;
 		half _SSSAmb;
 		half _SSSDist;
+        half _SSSRemapBlack;
+        half _SSSRemapWhite;
 		half _SSSEdgeValue;
 		half _SSSEdgePower;
 		//half _SSSProfileStrength;
@@ -95,7 +99,16 @@ Shader "Skin/Skin V2" {
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
 			// Hiding translucency tex in alpha
-			o.Alpha = tex2D (_SSSTex, IN.uv_MainTex);
+			//o.Alpha = tex2D (_SSSTex, IN.uv_MainTex);
+            
+            //o.Alpha *= _SSSRemapWhite;
+            
+            o.Alpha = saturate(lerp(_SSSRemapBlack, _SSSRemapWhite, tex2D (_SSSTex, IN.uv_MainTex).r));
+            
+            
+            //o.Alpha = (o.Alpha - _SSSRemapBlack) * (1 + _SSSRemapBlack);
+            
+            //o.Alpha = saturate(o.Alpha);
 
 
 			fixed3 n = UnpackNormal(tex2D(_NormalTex, IN.uv_MainTex));

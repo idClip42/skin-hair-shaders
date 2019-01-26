@@ -1,6 +1,6 @@
 // Upgrade NOTE: upgraded instancing buffer 'Props' to new syntax.
 
-Shader "Skin/Skin" {
+Shader "Skin/Skin Shader (Old)" {
 	Properties {
 		_Color ("Color", Color) = (0.8,0.8,0.8,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
