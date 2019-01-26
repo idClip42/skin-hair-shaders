@@ -25,8 +25,8 @@ Shader "Skin/Skin V2" {
 		_SSSTex ("Translucency Map", 2D) = "white" {}
 		_SSSEdgeValue("SSS Edge Value", Range(0,1)) = 1.0
 		_SSSEdgePower("SSS Edge Power", Float) = 2.0
-		_SSSProfile ("SSS Profile", 2D) = "black" {}
-		_SSSProfileStrength("SSS Profile Strength", Range(0,1)) = 0.0
+		//_SSSProfile ("SSS Profile", 2D) = "black" {}
+		//_SSSProfileStrength("SSS Profile Strength", Range(0,1)) = 0.0
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -46,7 +46,7 @@ Shader "Skin/Skin V2" {
 		sampler2D _MainTex;
 		sampler2D _NormalTex;
 		sampler2D _SSSTex;
-		sampler2D _SSSProfile;
+		//sampler2D _SSSProfile;
 		sampler2D _DetailNormalTex;
 		fixed4 _Color;
 //		fixed4 _SpecularColor;
@@ -58,7 +58,7 @@ Shader "Skin/Skin V2" {
 		half _SSSDist;
 		half _SSSEdgeValue;
 		half _SSSEdgePower;
-		half _SSSProfileStrength;
+		//half _SSSProfileStrength;
 		half _DetailNormalMapIntensity;
 //		half _DetailNormalMapStrength;
 
@@ -70,8 +70,8 @@ Shader "Skin/Skin V2" {
 			half spec = pow(max(0, dot(reflectionVector, viewDir)), _SpecPower);
 			half3 finalSpec = _SpecularValue * spec;
 
-			half3 profileSpec = tex2D (_SSSProfile, half2(spec/2, 0.5));//     (theDot/2 + .5);
-			finalSpec = lerp(finalSpec, profileSpec, _SSSProfileStrength);
+			//half3 profileSpec = tex2D (_SSSProfile, half2(spec/2, 0.5));//     (theDot/2 + .5);
+			//finalSpec = lerp(finalSpec, profileSpec, _SSSProfileStrength);
 			// return half4(finalSpec, 1);
 
 
