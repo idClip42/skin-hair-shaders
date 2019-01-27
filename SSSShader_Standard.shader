@@ -4,7 +4,12 @@ Shader "Skin/Skin Standard Shader" {
 		_Color ("Color", Color) = (0.8,0.8,0.8,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_NormalTex ("Normal Map", 2D) = "bump" {}
-        _Smoothness("Smoothness", Range(0,1)) = 0.6
+        
+        _SmoothnessTex ("Smoothness", 2D) = "white" {}
+        //_Smoothness("Smoothness", Range(0,1)) = 0.6
+        _SmoothnessRemapBlack ("Smoothness Remap Black", Range(-5,5)) = 0
+        _SmoothnessRemapWhite ("Smoothness Remap White", Range(-5,5)) = 0.7
+        
         _AOTex ("Ambient Occlusion", 2D) = "white" {}
 
         [Space]
@@ -19,10 +24,10 @@ Shader "Skin/Skin Standard Shader" {
 		_SSSAmb ("Translucency Ambient", Float) = 0.05
 		_SSSDist ("Translucency Distortion", Float) = 0.5
 		_SSSTex ("Translucency Map", 2D) = "white" {}
-        _SSSRemapBlack ("Translucency Remap Black", Range(-1,1)) = 0
-        _SSSRemapWhite ("Translucency Remap White", Range(0,2)) = 1
-		//_SSSEdgeValue("SSS Value", Range(0,1)) = 1.0
-		//_SSSEdgePower("SSS Power", Float) = 2.0
+        _SSSRemapBlack ("Translucency Remap Black", Range(-5,5)) = 0
+        _SSSRemapWhite ("Translucency Remap White", Range(-5,5)) = 1
+		_SSSEdgeValue("SSS Edge Value", Range(0,1)) = 1.0
+		_SSSEdgePower("SSS Edge Power", Float) = 4.0
 	}
 	SubShader {
         Tags { "RenderType"="Opaque" }
@@ -41,11 +46,16 @@ Shader "Skin/Skin Standard Shader" {
 
         sampler2D _MainTex;
         sampler2D _NormalTex;
+        sampler2D _SmoothnessTex;
         sampler2D _AOTex;
         sampler2D _DetailNormalTex;
         fixed4 _Color;
-        half _Smoothness;
+        //half _Smoothness;
         half _DetailNormalMapIntensity;
+        half _SmoothnessRemapBlack;
+        half _SmoothnessRemapWhite;
+        
+        
         void surf (Input IN, inout SurfaceOutputStandard o) {
             fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
             o.Albedo = c.rgb;
@@ -57,7 +67,8 @@ Shader "Skin/Skin Standard Shader" {
             nD.y *= _DetailNormalMapIntensity;
             o.Normal = normalize(n + nD);
             
-            o.Smoothness = _Smoothness;
+            o.Smoothness = saturate(lerp(_SmoothnessRemapBlack, _SmoothnessRemapWhite, tex2D (_SmoothnessTex, IN.uv_MainTex).r));
+            //o.Albedo = o.Smoothness;
             o.Metallic = 0;
             o.Occlusion = tex2D (_AOTex, IN.uv_MainTex);
 
@@ -92,8 +103,8 @@ Shader "Skin/Skin Standard Shader" {
         half _SSSDist;
         half _SSSRemapBlack;
         half _SSSRemapWhite;
-        //half _SSSEdgeValue;
-        //half _SSSEdgePower;
+        half _SSSEdgeValue;
+        half _SSSEdgePower;
         half _DetailNormalMapIntensity;
 
         half4 LightingSSS (SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
@@ -101,11 +112,11 @@ Shader "Skin/Skin Standard Shader" {
             half NdotL = dot (s.Normal, lightDir);
             half3 reflectionVector = normalize(2.0 * s.Normal * NdotL - lightDir);
             half translucency = Translucency(s.Normal, lightDir, viewDir, atten, _SSSPower, _SSSAmb, _SSSDist, s.Alpha);
-            //half sss = _SSSEdgeValue * pow(saturate(1 - abs(NdotL) - 0.5f), _SSSEdgePower);
+            half sss = _SSSEdgeValue * pow(saturate(1 - abs(NdotL) - 0.5f), _SSSEdgePower);
             half4 c;
             c.rgb = _LightColor0.rgb * (
-                 //+ sss * _SSSColor * atten
-                //+ 
+                 + sss * _SSSColor * atten
+                + 
                 translucency * _SSSColor
                 );
             c.a = 1;
