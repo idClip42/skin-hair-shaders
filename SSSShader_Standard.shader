@@ -88,7 +88,7 @@ Shader "Skin/Skin Standard Shader" {
             
             
             //o.Albedo = o.Smoothness;
-            o.Metallic = 0;
+            //o.Metallic = 0;
             //o.Occlusion = tex2D (_AOTex, IN.uv_MainTex).g;
 
         }

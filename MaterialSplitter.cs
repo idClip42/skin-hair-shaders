@@ -43,10 +43,10 @@ public class MaterialSplitter : MonoBehaviour
 
                     Material standardMat = new Material(mat);
                     standardMat.shader = standardShader;
-                    standardMat.CopyPropertiesFromMaterial(mat);
+                    //standardMat.CopyPropertiesFromMaterial(mat);
                     Material overlayMat = new Material(mat);
                     overlayMat.shader = overlayShader;
-                    overlayMat.CopyPropertiesFromMaterial(mat);
+                    //overlayMat.CopyPropertiesFromMaterial(mat);
 
                     matList[m] = standardMat;
                     Material[] newMatList = new Material[matList.Length + 1];

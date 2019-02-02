@@ -36,7 +36,7 @@
 	SubShader {
         LOD 200
         
-        Tags { "Queue" = "Transparent-100" "RenderType"="Transparent" }
+        //Tags { "Queue" = "Transparent-100" "RenderType"="Transparent" }
         
         //ZWrite Off
         Blend One One // Additive
