@@ -31,6 +31,7 @@
 			float2 uv_MainTex;
 			float2 uv_AnisoDir;
 			float4 screenPos;
+            float3 worldNormal; INTERNAL_DATA
 		};
 
 		struct SurfaceAnisoOutput
@@ -39,6 +40,7 @@
 //			fixed3 AnisoDirection;
 
 			fixed3 Normal;
+            fixed3 NormalOrig;
 			fixed3 Emission;
 			fixed Alpha;
 		};
@@ -91,6 +93,7 @@
 			o.Normal *= 2;
 //			o.Normal = anisoTex;
 //			o.Normal = o.AnisoDirection;
+            o.NormalOrig = WorldNormalVector (IN, o.Normal);
 		}
 		ENDCG
 	}

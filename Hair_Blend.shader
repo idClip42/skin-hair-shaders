@@ -16,13 +16,13 @@
 		[Header(Anisotropy)]
 		_AnisoDir ("Anisotropic Direction", 2D) = ""{}
 
-		[Space]
-		[Header(Other Shit)]
-		[Toggle] _BaseNormals("Use Basic Normals for Diffuse", Float) = 0
-		[Toggle] _Translucency("Use Translucency", Float) = 0
-		_TransPower ("Translucency Power", Float) = 2
-		// _TransAmb ("Translucency Ambient", Float) = 0.25
-		_TransDist ("Translucency Distortion", Float) = 1.5
+		//[Space]
+		//[Header(Other Shit)]
+		//[Toggle] _BaseNormals("Use Basic Normals for Diffuse", Float) = 0
+		//[Toggle] _Translucency("Use Translucency", Float) = 0
+		//_TransPower ("Translucency Power", Float) = 2
+		//// _TransAmb ("Translucency Ambient", Float) = 0.25
+		//_TransDist ("Translucency Distortion", Float) = 1.5
 	}
 	SubShader {
 		Tags { "Queue"="AlphaTest" "RenderType"="TransparentCutout" }
@@ -32,8 +32,8 @@
 		CGPROGRAM
 		#pragma surface surf Anisotropic alphatest:_Cutoff addshadow fullforwardshadows
 		#pragma target 3.0
-		#pragma shader_feature _BASENORMALS_ON
-		#pragma shader_feature _TRANSLUCENCY_ON
+		//#pragma shader_feature _BASENORMALS_ON
+		//#pragma shader_feature _TRANSLUCENCY_ON
 
 
 		struct Input {
@@ -62,9 +62,9 @@
 		sampler2D _AnisoDir;
 		float _AnisoOffset;
 
-		half _TransPower;
-		// half _TransAmb;
-		half _TransDist;
+		//half _TransPower;
+		//// half _TransAmb;
+		//half _TransDist;
 
 		#include "AnisoLighting.cginc"
 	
@@ -92,8 +92,8 @@
 		CGPROGRAM
 		#pragma surface surf Anisotropic alpha:blend fullforwardshadows
 		#pragma target 3.0
-		#pragma shader_feature _BASENORMALS_ON
-		#pragma shader_feature _TRANSLUCENCY_ON
+		//#pragma shader_feature _BASENORMALS_ON
+		//#pragma shader_feature _TRANSLUCENCY_ON
 
 
 		struct Input {
@@ -123,9 +123,9 @@
 		sampler2D _AnisoDir;
 		float _AnisoOffset;
 
-		half _TransPower;
-		// half _TransAmb;
-		half _TransDist;
+		//half _TransPower;
+		//// half _TransAmb;
+		//half _TransDist;
 
 		#include "AnisoLighting.cginc"
 

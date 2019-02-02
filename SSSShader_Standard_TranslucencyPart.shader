@@ -34,9 +34,12 @@
 		_SSSEdgePower("SSS Edge Power", Float) = 4.0
 	}
 	SubShader {
-        LOD 200
+        //LOD 200
         
-        //Tags { "Queue" = "Transparent-100" "RenderType"="Transparent" }
+        //Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
+        //Tags { "Queue" = "Geometry" "RenderType"="Opaque" }
+
+        //Tags { "ForceNoShadowCasting" = "True"}
         
         //ZWrite Off
         Blend One One // Additive
@@ -104,6 +107,6 @@
         }
         ENDCG
 	}
-	FallBack "Diffuse"
-    CustomEditor "StandardSkinShaderGUI"
+	//FallBack "Diffuse"
+    //CustomEditor "StandardSkinShaderGUI"
 }

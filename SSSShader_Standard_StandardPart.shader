@@ -95,5 +95,5 @@
         ENDCG
 	}
 	FallBack "Diffuse"
-    CustomEditor "StandardSkinShaderGUI"
+    //CustomEditor "StandardSkinShaderGUI"
 }
