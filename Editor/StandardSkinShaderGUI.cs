@@ -136,10 +136,11 @@ namespace UnityEditor
 
             //if (detailNormIntensitySpec == null)
                 m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity);
+            m_MaterialEditor.TextureScaleOffsetProperty(detailNorm);
             //else
             //m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity, detailNormIntensitySpec);
 
-            if(lodBiasDiff != null)
+            if (lodBiasDiff != null)
                 m_MaterialEditor.ShaderProperty(lodBiasDiff, Styles.lodBiasDiff);
             if (detailNormIntensitySpec != null)
                 m_MaterialEditor.ShaderProperty(detailNormIntensitySpec, Styles.detailNormIntensitySpec);

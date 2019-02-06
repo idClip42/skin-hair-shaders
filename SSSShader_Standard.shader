@@ -80,10 +80,10 @@ Shader "Skin/Skin Standard Shader" {
             #ifdef _SINGLEMAP_ON
                 fixed3 map = tex2D (_S_AO_SSS_Tex, IN.uv_MainTex);
                 o.Smoothness = saturate(lerp(_SmoothnessRemapBlack, _SmoothnessRemapWhite, map.b));
-                o.Occlusion = map.g * _AOStrength;
+                o.Occlusion = lerp(1, map.g, _AOStrength);
             #else
                 o.Smoothness = saturate(lerp(_SmoothnessRemapBlack, _SmoothnessRemapWhite, tex2D (_SmoothnessTex, IN.uv_MainTex).b));
-                o.Occlusion = tex2D (_AOTex, IN.uv_MainTex).g * _AOStrength;
+                o.Occlusion = lerp(1, tex2D (_AOTex, IN.uv_MainTex).g, _AOStrength);
             #endif
             
             
