@@ -23,7 +23,9 @@ namespace UnityEditor
             public static GUIContent smoothRemapWhite = new GUIContent("Smoothness Remap White");
 
             public static GUIContent detailNorm = new GUIContent("Detail Normal Map");
-            public static GUIContent detailNormIntensity = new GUIContent("Detail Normal Map Intensity");
+            public static GUIContent detailNormIntensity = new GUIContent("Detail Normal Map Intensity Diffuse");
+            public static GUIContent detailNormIntensitySpec = new GUIContent("Detail Normal Map Intensity Specular");
+            public static GUIContent lodBiasDiff = new GUIContent("LOD Bias for diffuse normals");
 
             public static GUIContent sssColor = new GUIContent("Subsurface Color");
             public static GUIContent sssPower = new GUIContent("Translucency Power");
@@ -54,6 +56,8 @@ namespace UnityEditor
 
         MaterialProperty detailNorm = null;
         MaterialProperty detailNormIntensity = null;
+        MaterialProperty detailNormIntensitySpec = null;
+        MaterialProperty lodBiasDiff = null;
 
         MaterialProperty sssColor = null;
         MaterialProperty sssPower = null;
@@ -89,6 +93,14 @@ namespace UnityEditor
 
             detailNorm = FindProperty("_DetailNormalTex", props);
             detailNormIntensity = FindProperty("_DetailNormalMapIntensity", props);
+            try
+            {
+                detailNormIntensitySpec = FindProperty("_DetailNormalMapIntensitySpec", props);
+                lodBiasDiff = FindProperty("_DiffuseNormalLod", props);
+            } catch (Exception e)
+            {
+
+            }
 
             sssColor = FindProperty("_SSSColor", props);
             sssPower = FindProperty("_SSSPower", props);
@@ -116,8 +128,21 @@ namespace UnityEditor
 
             GUILayout.Label("Primary Textures", EditorStyles.boldLabel);
             m_MaterialEditor.TexturePropertySingleLine(Styles.tex, tex, color);
-            m_MaterialEditor.TexturePropertySingleLine(Styles.norm, norm);
-            m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity);
+
+            //if (lodBiasDiff == null)
+                m_MaterialEditor.TexturePropertySingleLine(Styles.norm, norm);
+            //else
+                //m_MaterialEditor.TexturePropertySingleLine(Styles.norm, norm, lodBiasDiff);
+
+            //if (detailNormIntensitySpec == null)
+                m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity);
+            //else
+            //m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity, detailNormIntensitySpec);
+
+            if(lodBiasDiff != null)
+                m_MaterialEditor.ShaderProperty(lodBiasDiff, Styles.lodBiasDiff);
+            if (detailNormIntensitySpec != null)
+                m_MaterialEditor.ShaderProperty(detailNormIntensitySpec, Styles.detailNormIntensitySpec);
 
             GUILayout.Label("Material Properties", EditorStyles.boldLabel);
             m_MaterialEditor.ShaderProperty(singleMap, Styles.singleMap);
