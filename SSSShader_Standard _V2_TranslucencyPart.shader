@@ -1,4 +1,4 @@
-Shader "Skin/Skin Standard Shader V2" {
+Shader "Skin/Skin Standard Shader V2 (Translucency Part)" {
 	Properties {
 		_Color ("Color", Color) = (0.8,0.8,0.8,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
@@ -27,16 +27,13 @@ Shader "Skin/Skin Standard Shader V2" {
 		_SSSEdgePower("SSS Edge Power", Float) = 4.0
 	}
 	SubShader {
-        Tags { "RenderType"="Opaque" }
-        LOD 200
-        CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows
-        #pragma target 3.0
-        #include "SSSShader_Standard_V2_BasePass.cginc"
-        ENDCG
-        
-        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         Blend One One
+        //ZWrite Off
+                
+        //Tags { "Queue" = "AlphaTest" "RenderType"="Opaque" }
+        //Tags { "Queue" = "Overlay" }
+        Tags { "Queue" = "Transparent" "RenderType"="Opaque" }
+        //Tags { "Queue" = "AlphaTest" "RenderType"="Transparent" "IgnoreProjector" = "True" }
         
         CGPROGRAM
         #pragma surface surf Standard fullforwardshadows
@@ -44,13 +41,22 @@ Shader "Skin/Skin Standard Shader V2" {
         #include "SSSShader_Standard_V2_SpecPass.cginc"
         ENDCG
         
+        //Tags { "Queue" = "Geometry" "RenderType"="Opaque" }
+        
         CGPROGRAM
         #pragma surface surf SSS fullforwardshadows
         #pragma target 3.0
         #include "Translucency.cginc"
         #include "SSSShader_Standard_V2_SSSPass.cginc"
         ENDCG
+        
+        //Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
+        
+        //CGPROGRAM
+        //#pragma surface surf Standard fullforwardshadows alpha:blend
+        //#pragma target 3.0
+        //#include "SSSShader_Standard_V2_SpecPass.cginc"
+        //ENDCG
 	}
-	FallBack "Diffuse"
-    CustomEditor "StandardSkinShaderGUI"
+    //FallBack "Diffuse"
 }

@@ -81,12 +81,12 @@ namespace UnityEditor
             tex = FindProperty("_MainTex", props);
             norm = FindProperty("_NormalTex", props);
 
-            smooth = FindProperty("_SmoothnessTex", props);
-            ao = FindProperty("_AOTex", props);
+            //smooth = FindProperty("_SmoothnessTex", props);
+            //ao = FindProperty("_AOTex", props);
             aoStr = FindProperty("_AOStrength", props);
-            thickness = FindProperty("_SSSTex", props);
+            //thickness = FindProperty("_SSSTex", props);
             s_ao_sss = FindProperty("_S_AO_SSS_Tex", props);
-            singleMap = FindProperty("_SingleMap", props);
+            //singleMap = FindProperty("_SingleMap", props);
 
             smoothRemapBlack = FindProperty("_SmoothnessRemapBlack", props);
             smoothRemapWhite = FindProperty("_SmoothnessRemapWhite", props);
@@ -96,11 +96,16 @@ namespace UnityEditor
             try
             {
                 detailNormIntensitySpec = FindProperty("_DetailNormalMapIntensitySpec", props);
-                lodBiasDiff = FindProperty("_DiffuseNormalLod", props);
-            } catch (Exception e)
-            {
+                lodBiasDiff = FindProperty("_DiffuseNormalLod", props);;
+            } catch (Exception e) { }
 
-            }
+            try
+            {
+                singleMap = FindProperty("_SingleMap", props);
+                thickness = FindProperty("_SSSTex", props);
+                smooth = FindProperty("_SmoothnessTex", props);
+                ao = FindProperty("_AOTex", props);
+            } catch (Exception e) { }
 
             sssColor = FindProperty("_SSSColor", props);
             sssPower = FindProperty("_SSSPower", props);
@@ -146,16 +151,16 @@ namespace UnityEditor
                 m_MaterialEditor.ShaderProperty(detailNormIntensitySpec, Styles.detailNormIntensitySpec);
 
             GUILayout.Label("Material Properties", EditorStyles.boldLabel);
-            m_MaterialEditor.ShaderProperty(singleMap, Styles.singleMap);
-            if (material.GetFloat("_SingleMap") == 1.0f)
-            {
-                m_MaterialEditor.TexturePropertySingleLine(Styles.s_ao_sss, s_ao_sss);
-            }
-            else
+            if (singleMap != null) m_MaterialEditor.ShaderProperty(singleMap, Styles.singleMap);
+            if (singleMap != null && material.GetFloat("_SingleMap") < 1.0f)
             {
                 m_MaterialEditor.TexturePropertySingleLine(Styles.smooth, smooth);
                 m_MaterialEditor.TexturePropertySingleLine(Styles.ao, ao);
                 m_MaterialEditor.TexturePropertySingleLine(Styles.sssTex, thickness);
+            }
+            else
+            {
+                m_MaterialEditor.TexturePropertySingleLine(Styles.s_ao_sss, s_ao_sss); 
             }
             m_MaterialEditor.ShaderProperty(aoStr, Styles.aoStr);
             m_MaterialEditor.ShaderProperty(smoothRemapBlack, Styles.smoothRemapBlack);
