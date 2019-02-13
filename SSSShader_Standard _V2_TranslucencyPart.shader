@@ -28,21 +28,7 @@ Shader "Skin/Skin Standard Shader V2 (Translucency Part)" {
 	}
 	SubShader {
         Blend One One
-        //ZWrite Off
                 
-        //Tags { "Queue" = "AlphaTest" "RenderType"="Opaque" }
-        //Tags { "Queue" = "Overlay" }
-        Tags { "Queue" = "Transparent" "RenderType"="Opaque" }
-        //Tags { "Queue" = "AlphaTest" "RenderType"="Transparent" "IgnoreProjector" = "True" }
-        
-        CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows
-        #pragma target 3.0
-        #include "SSSShader_Standard_V2_SpecPass.cginc"
-        ENDCG
-        
-        //Tags { "Queue" = "Geometry" "RenderType"="Opaque" }
-        
         CGPROGRAM
         #pragma surface surf SSS fullforwardshadows
         #pragma target 3.0
@@ -50,13 +36,19 @@ Shader "Skin/Skin Standard Shader V2 (Translucency Part)" {
         #include "SSSShader_Standard_V2_SSSPass.cginc"
         ENDCG
         
-        //Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
-        
-        //CGPROGRAM
-        //#pragma surface surf Standard fullforwardshadows alpha:blend
-        //#pragma target 3.0
-        //#include "SSSShader_Standard_V2_SpecPass.cginc"
-        //ENDCG
+        CGPROGRAM
+        #pragma surface surf StandardSpecForward fullforwardshadows
+        #pragma target 3.0
+        #include "UnityPBSLighting.cginc"
+        half4 LightingStandardSpecForward (SurfaceOutputStandard s, half3 viewDir, UnityGI gi) {
+            fixed4 pbr = LightingStandard(s, viewDir, gi);
+            return pbr;
+        }
+        void LightingStandardSpecForward_GI(SurfaceOutputStandard s, UnityGIInput data, inout UnityGI gi)
+        {
+            LightingStandard_GI(s, data, gi); 
+        }
+        #include "SSSShader_Standard_V2_SpecPass.cginc"
+        ENDCG
 	}
-    //FallBack "Diffuse"
 }

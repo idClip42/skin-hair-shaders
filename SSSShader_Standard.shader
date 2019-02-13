@@ -19,7 +19,7 @@ Shader "Skin/Skin Standard Shader" {
         //[Space]
         //[Header(Details)]
         _DetailNormalTex ("Detail Normal Map", 2D) = "bump" {}
-        _DetailNormalMapIntensity ("Detail Normal Map Intensity", Range(-2,2)) = 1
+        _DetailNormalMapIntensity ("Detail Normal Map Intensity", Range(0,2)) = 1
 
 		//[Space]
 		//[Header(Subsurface Scattering)]

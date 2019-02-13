@@ -21,4 +21,5 @@ void surf (Input IN, inout SurfaceOutputStandard o) {
     nD.y *= _DetailNormalMapIntensitySpec;
     o.Normal = normalize(n + nD);
     o.Smoothness = saturate(lerp(_SmoothnessRemapBlack, _SmoothnessRemapWhite, tex2D (_S_AO_SSS_Tex, IN.uv_MainTex).b));
+    //o.Occlusion = 0;
 }

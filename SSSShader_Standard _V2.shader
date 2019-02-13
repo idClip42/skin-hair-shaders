@@ -12,10 +12,10 @@ Shader "Skin/Skin Standard Shader V2" {
         _S_AO_SSS_Tex ("Thickness (R), Ambient Occlusion (G), Smoothness (B)", 2D) = "white" {}
 
         _DetailNormalTex ("Detail Normal Map", 2D) = "bump" {}
-        _DetailNormalMapIntensity ("Detail Normal Map Intensity Diffuse", Range(0,2)) = 1
-        _DetailNormalMapIntensitySpec ("Detail Normal Map Intensity Specular", Range(0,2)) = 1
+        _DetailNormalMapIntensity ("Detail Normal Map Intensity Diffuse", Range(0,2)) = 0
+        _DetailNormalMapIntensitySpec ("Detail Normal Map Intensity Specular", Range(0,2)) = 2
         
-        _DiffuseNormalLod ("LOD Bias for diffuse normals", Int) = 2
+        _DiffuseNormalLod ("LOD Bias for diffuse normals", Int) = 3
 
 		_SSSColor ("Subsurface Color", Color) = (0.95,0.10,0.06,1)
 		_SSSPower ("Translucency Power", Float) = 5

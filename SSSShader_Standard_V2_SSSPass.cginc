@@ -12,6 +12,7 @@ half _SSSRemapBlack;
 half _SSSRemapWhite;
 half _SSSEdgeValue;
 half _SSSEdgePower;
+int _DiffuseNormalLod;
 
 half4 LightingSSS (SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
 {
@@ -30,5 +31,7 @@ half4 LightingSSS (SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
 void surf (Input IN, inout SurfaceOutput o) {
     o.Albedo = 0;
     o.Alpha = saturate(lerp(_SSSRemapBlack, _SSSRemapWhite, tex2D (_S_AO_SSS_Tex, IN.uv_MainTex).r));
-    o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_MainTex));
+    //o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_MainTex));
+    o.Normal = UnpackNormal(tex2Dlod(_NormalTex, half4(IN.uv_MainTex, 1, _DiffuseNormalLod)));
+
 }
