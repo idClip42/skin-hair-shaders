@@ -21,5 +21,6 @@ void surf (Input IN, inout SurfaceOutputStandard o) {
     nD.x *= _DetailNormalMapIntensity;
     nD.y *= _DetailNormalMapIntensity;
     o.Normal = normalize(n + nD);
-    o.Occlusion = lerp(1, tex2D (_S_AO_SSS_Tex, IN.uv_MainTex).g, _AOStrength);
+    fixed4 mixTex = tex2D (_S_AO_SSS_Tex, IN.uv_MainTex);
+    o.Occlusion = lerp(1, mixTex.g, _AOStrength) * mixTex.a;
 }

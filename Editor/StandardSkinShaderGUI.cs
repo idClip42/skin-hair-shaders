@@ -16,7 +16,7 @@ namespace UnityEditor
             public static GUIContent ao = new GUIContent("Ambient Occlusion Map");
             public static GUIContent aoStr = new GUIContent("Ambient Occlusion Strength");
             public static GUIContent thickness = new GUIContent("Thickness Map");
-            public static GUIContent s_ao_sss = new GUIContent("Thickness(R), AO(G), Smooth(B)");
+            public static GUIContent s_ao_sss = new GUIContent("Thick(R), AO(G), Smooth(B), HairMask(A)");
             public static GUIContent singleMap = new GUIContent("Use Single S/AO/SSS Map");
 
             public static GUIContent smoothRemapBlack = new GUIContent("Smoothness Remap Black");

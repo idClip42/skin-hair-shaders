@@ -3,11 +3,11 @@
     float2 uv_DetailNormalTex;
 };
 
-sampler2D _MainTex;
+//sampler2D _MainTex;
 sampler2D _NormalTex;
 sampler2D _S_AO_SSS_Tex;
 sampler2D _DetailNormalTex;
-fixed4 _Color;
+//fixed4 _Color;
 half _DetailNormalMapIntensitySpec;
 half _SmoothnessRemapBlack;
 half _SmoothnessRemapWhite;
@@ -20,6 +20,7 @@ void surf (Input IN, inout SurfaceOutputStandard o) {
     nD.x *= _DetailNormalMapIntensitySpec;
     nD.y *= _DetailNormalMapIntensitySpec;
     o.Normal = normalize(n + nD);
-    o.Smoothness = saturate(lerp(_SmoothnessRemapBlack, _SmoothnessRemapWhite, tex2D (_S_AO_SSS_Tex, IN.uv_MainTex).b));
+    float4 mixTex = tex2D (_S_AO_SSS_Tex, IN.uv_MainTex);
+    o.Smoothness = saturate(lerp(_SmoothnessRemapBlack, _SmoothnessRemapWhite, mixTex.b)) * mixTex.a;
     //o.Occlusion = 0;
 }
