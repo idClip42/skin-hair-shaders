@@ -35,7 +35,10 @@ namespace UnityEditor
             public static GUIContent sssRemapBlack = new GUIContent("Translucency Remap Black");
             public static GUIContent sssRemapWhite = new GUIContent("Translucency Remap White");
             public static GUIContent sssEdgeValue = new GUIContent("SSS Edge Value");
-            public static GUIContent sssEdgePower = new GUIContent("SSS Edge Power");
+
+            //public static GUIContent sssEdgePower = new GUIContent("SSS Edge Power");
+            public static GUIContent sssEdgePowerMin = new GUIContent("SSS Edge Power Min");
+            public static GUIContent sssEdgePowerMax = new GUIContent("SSS Edge Power Max");
         }
 
 
@@ -66,7 +69,10 @@ namespace UnityEditor
         MaterialProperty sssRemapBlack = null;
         MaterialProperty sssRemapWhite = null;
         MaterialProperty sssEdgeValue = null;
-        MaterialProperty sssEdgePower = null;
+
+        //MaterialProperty sssEdgePower = null;
+        MaterialProperty sssEdgePowerMin = null;
+        MaterialProperty sssEdgePowerMax = null;
 
 
 
@@ -81,31 +87,17 @@ namespace UnityEditor
             tex = FindProperty("_MainTex", props);
             norm = FindProperty("_NormalTex", props);
 
-            //smooth = FindProperty("_SmoothnessTex", props);
-            //ao = FindProperty("_AOTex", props);
             aoStr = FindProperty("_AOStrength", props);
-            //thickness = FindProperty("_SSSTex", props);
             s_ao_sss = FindProperty("_S_AO_SSS_Tex", props);
-            //singleMap = FindProperty("_SingleMap", props);
 
             smoothRemapBlack = FindProperty("_SmoothnessRemapBlack", props);
             smoothRemapWhite = FindProperty("_SmoothnessRemapWhite", props);
 
             detailNorm = FindProperty("_DetailNormalTex", props);
             detailNormIntensity = FindProperty("_DetailNormalMapIntensity", props);
-            try
-            {
-                detailNormIntensitySpec = FindProperty("_DetailNormalMapIntensitySpec", props);
-                lodBiasDiff = FindProperty("_DiffuseNormalLod", props);;
-            } catch (Exception e) { }
 
-            try
-            {
-                singleMap = FindProperty("_SingleMap", props);
-                thickness = FindProperty("_SSSTex", props);
-                smooth = FindProperty("_SmoothnessTex", props);
-                ao = FindProperty("_AOTex", props);
-            } catch (Exception e) { }
+            detailNormIntensitySpec = FindProperty("_DetailNormalMapIntensitySpec", props);
+            lodBiasDiff = FindProperty("_DiffuseNormalLod", props);
 
             sssColor = FindProperty("_SSSColor", props);
             sssPower = FindProperty("_SSSPower", props);
@@ -114,7 +106,9 @@ namespace UnityEditor
             sssRemapBlack = FindProperty("_SSSRemapBlack", props);
             sssRemapWhite = FindProperty("_SSSRemapWhite", props);
             sssEdgeValue = FindProperty("_SSSEdgeValue", props);
-            sssEdgePower = FindProperty("_SSSEdgePower", props);
+
+            sssEdgePowerMin = FindProperty("_SSSEdgePowerMin", props);
+            sssEdgePowerMax = FindProperty("_SSSEdgePowerMax", props);
         }
 
 
@@ -134,34 +128,18 @@ namespace UnityEditor
             GUILayout.Label("Primary Textures", EditorStyles.boldLabel);
             m_MaterialEditor.TexturePropertySingleLine(Styles.tex, tex, color);
 
-            //if (lodBiasDiff == null)
-                m_MaterialEditor.TexturePropertySingleLine(Styles.norm, norm);
-            //else
-                //m_MaterialEditor.TexturePropertySingleLine(Styles.norm, norm, lodBiasDiff);
+            m_MaterialEditor.TexturePropertySingleLine(Styles.norm, norm);
 
-            //if (detailNormIntensitySpec == null)
-                m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity);
+            m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity);
             m_MaterialEditor.TextureScaleOffsetProperty(detailNorm);
-            //else
-            //m_MaterialEditor.TexturePropertySingleLine(Styles.detailNorm, detailNorm, detailNormIntensity, detailNormIntensitySpec);
 
-            if (lodBiasDiff != null)
-                m_MaterialEditor.ShaderProperty(lodBiasDiff, Styles.lodBiasDiff);
-            if (detailNormIntensitySpec != null)
-                m_MaterialEditor.ShaderProperty(detailNormIntensitySpec, Styles.detailNormIntensitySpec);
+            m_MaterialEditor.ShaderProperty(lodBiasDiff, Styles.lodBiasDiff);
+            m_MaterialEditor.ShaderProperty(detailNormIntensitySpec, Styles.detailNormIntensitySpec);
 
             GUILayout.Label("Material Properties", EditorStyles.boldLabel);
-            if (singleMap != null) m_MaterialEditor.ShaderProperty(singleMap, Styles.singleMap);
-            if (singleMap != null && material.GetFloat("_SingleMap") < 1.0f)
-            {
-                m_MaterialEditor.TexturePropertySingleLine(Styles.smooth, smooth);
-                m_MaterialEditor.TexturePropertySingleLine(Styles.ao, ao);
-                m_MaterialEditor.TexturePropertySingleLine(Styles.sssTex, thickness);
-            }
-            else
-            {
-                m_MaterialEditor.TexturePropertySingleLine(Styles.s_ao_sss, s_ao_sss); 
-            }
+
+            m_MaterialEditor.TexturePropertySingleLine(Styles.s_ao_sss, s_ao_sss); 
+
             m_MaterialEditor.ShaderProperty(aoStr, Styles.aoStr);
             m_MaterialEditor.ShaderProperty(smoothRemapBlack, Styles.smoothRemapBlack);
             m_MaterialEditor.ShaderProperty(smoothRemapWhite, Styles.smoothRemapWhite);
@@ -174,7 +152,9 @@ namespace UnityEditor
             m_MaterialEditor.ShaderProperty(sssAmb, Styles.sssAmb);
             m_MaterialEditor.ShaderProperty(sssDist, Styles.sssDist);
             m_MaterialEditor.ShaderProperty(sssEdgeValue, Styles.sssEdgeValue);
-            m_MaterialEditor.ShaderProperty(sssEdgePower, Styles.sssEdgePower);
+
+            m_MaterialEditor.ShaderProperty(sssEdgePowerMin, Styles.sssEdgePowerMin);
+            m_MaterialEditor.ShaderProperty(sssEdgePowerMax, Styles.sssEdgePowerMax);
         }
 
     }

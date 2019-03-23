@@ -23,8 +23,10 @@ Shader "Skin/Skin Standard Shader V2" {
 		_SSSDist ("Translucency Distortion", Float) = 0.5
         _SSSRemapBlack ("Translucency Remap Black", Range(-5,5)) = 0
         _SSSRemapWhite ("Translucency Remap White", Range(-5,5)) = 1
-		_SSSEdgeValue("SSS Edge Value", Range(0,1)) = 1.0
-		_SSSEdgePower("SSS Edge Power", Float) = 4.0
+		_SSSEdgeValue("SSS Edge Value", Range(0,10)) = 5.0
+        
+        _SSSEdgePowerMin("SSS Edge Power Min", Float) = 0
+        _SSSEdgePowerMax("SSS Edge Power Max", Float) = 8
 	}
 	SubShader {
         Tags { "RenderType"="Opaque" }
