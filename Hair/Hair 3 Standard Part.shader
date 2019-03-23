@@ -6,6 +6,7 @@
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Cutoff ("Cutoff", range(0,1)) = 0.5
         _Metallic("Metalness", range(0,1)) = 0
+        _AO("Ambient Occlusion", range(0,1)) = 0.25
         _AnisoDir ("Anisotropic Direction", 2D) = ""{}
         _SpecularColor ("Specular Color", Color) = (1,1,1,1)
         _SpecPower ("Specular Power", Range(0,1)) = 0.1

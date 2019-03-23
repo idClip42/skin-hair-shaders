@@ -10,6 +10,7 @@ sampler2D _AnisoDir;
 fixed4 _Color;
 half _Cutoff;
 half _Metallic;
+half _AO;
 
 #include "Dither.cginc"
 
@@ -23,4 +24,5 @@ void surf (Input IN, inout SurfaceOutputStandard o)
     Dither((IN.screenPos.xy)/IN.screenPos.w, o.Alpha);
     
     o.Metallic = _Metallic;
+    o.Occlusion = _AO;
 }
