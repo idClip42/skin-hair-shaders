@@ -8,8 +8,8 @@ public class MaterialSplitter : MonoBehaviour
 
 	void Start () 
     {
-        foreach (ShaderSet set in shaderSets)
-            set.Init();
+        for(int s = 0; s < shaderSets.Length; ++s)
+            shaderSets[s].Init();
 	}
 
     [System.Serializable]
@@ -19,15 +19,22 @@ public class MaterialSplitter : MonoBehaviour
         public Shader standardShader;
         public Shader overlayShader;
 
+        // TODO: Add bools for skinned and non-skinned renderers
+
         public void Init()
         {
+            if (baseShader == null || standardShader == null || overlayShader == null)
+                return;
+
             FindAllMaterials();
         }
 
         void FindAllMaterials()
         {
-            foreach(SkinnedMeshRenderer mesh in FindObjectsOfType<SkinnedMeshRenderer>())
-                CheckRenderer(mesh.sharedMesh, mesh.materials, mesh);
+            SkinnedMeshRenderer[] meshes = FindObjectsOfType<SkinnedMeshRenderer>();
+            for (int m = 0; m < meshes.Length; ++m)
+                CheckRenderer(meshes[m].sharedMesh, meshes[m].materials, meshes[m]);
+
         }
 
         void CheckRenderer(Mesh mesh, Material[] matList, Renderer renderer)
