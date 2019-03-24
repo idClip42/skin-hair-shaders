@@ -2,8 +2,8 @@
     float2 uv_MainTex;
 };
 
-sampler2D _MainTex;
-fixed4 _Color;
+//sampler2D _MainTex;
+//fixed4 _Color;
 sampler2D _NormalTex;
 sampler2D _S_AO_SSS_Tex;
 fixed4 _SSSColor;
@@ -32,19 +32,19 @@ half4 LightingSSS (SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
     half sss = _SSSEdgeValue * pow(saturate(1 - abs(NdotL) - 0.5f), modEdgePower) * s.Gloss;
     half4 c;
     
-    half3 sssColor = //s.Albedo + 
-    _SSSColor// * s.Alpha
-    ;
+    //half3 sssColor = //s.Albedo + 
+    //_SSSColor// * s.Alpha
+    //;
     
     c.rgb = _LightColor0.rgb * (
-         + sss * sssColor * atten
+         + sss * _SSSColor * atten
         + translucency * _SSSColor);
     c.a = 1;
     return c;
 }
 
 void surf (Input IN, inout SurfaceOutput o) {
-    o.Albedo = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+    //o.Albedo = tex2D (_MainTex, IN.uv_MainTex) * _Color;
     float4 mixTex = tex2D (_S_AO_SSS_Tex, IN.uv_MainTex);
     o.Alpha = saturate(lerp(_SSSRemapBlack, _SSSRemapWhite, mixTex.r));
     o.Gloss = mixTex.a; // Hiding this mask in here.
