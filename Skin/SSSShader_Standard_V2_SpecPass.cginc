@@ -1,13 +1,14 @@
 ﻿struct Input {
     float2 uv_MainTex;
     float2 uv_DetailNormalTex;
-    float3 viewDir;
+    //float3 viewDir;
 };
 
 //sampler2D _MainTex;
 sampler2D _NormalTex;
 sampler2D _S_AO_SSS_Tex;
 sampler2D _DetailNormalTex;
+half _AOStrength;
 //fixed4 _Color;
 half _DetailNormalMapIntensitySpec;
 half _SmoothnessRemapBlack;
@@ -24,7 +25,7 @@ void surf (Input IN, inout SurfaceOutputStandard o) {
     float4 mixTex = tex2D (_S_AO_SSS_Tex, IN.uv_MainTex);
     o.Smoothness = saturate(lerp(_SmoothnessRemapBlack, _SmoothnessRemapWhite, mixTex.b)) * mixTex.a;
     
-    o.Smoothness *= saturate(3 * abs(dot(IN.viewDir, o.Normal)));
+    o.Occlusion = lerp(1, mixTex.g, _AOStrength) * mixTex.a;
     
-    //o.Occlusion = 0;
+    //o.Smoothness *= saturate(3 * abs(dot(IN.viewDir, o.Normal)));
 }
