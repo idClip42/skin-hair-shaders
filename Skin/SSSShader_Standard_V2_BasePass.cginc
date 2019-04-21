@@ -23,4 +23,5 @@ void surf (Input IN, inout SurfaceOutputStandard o) {
     o.Normal = normalize(n + nD);
     fixed4 mixTex = tex2D (_S_AO_SSS_Tex, IN.uv_MainTex);
     o.Occlusion = lerp(1, mixTex.g, _AOStrength) * mixTex.a;
+    o.Metallic = 1 - mixTex.a;
 }
