@@ -7,10 +7,6 @@
 
 half Translucency (fixed3 norm, half3 lightDir, half3 viewDir, half atten, half sssPow, half sssAmb, half sssDist, half thick){
 	half3 vLTLight = lightDir + norm * sssDist;
-//	half fLTDot = pow(saturate(dot(viewDir, -vLTLight)), sssPow);
-	/// float transDot = pow ( max (0, dot ( viewDir, -transLightDir ) ), _Power ) * _Scale;
-//	half fLTDot = pow(dot(viewDir, -vLTLight), sssPow);
 	half fLTDot = pow (max (0, dot(viewDir, -vLTLight) ), sssPow);
-//	return atten  * (fLTDot + sssAmb) * thick;
-	return (atten * 2) * (fLTDot + sssAmb) * thick;
+	return (atten) * (fLTDot + sssAmb) * thick;
 }

@@ -19,7 +19,7 @@ Shader "Skin/Skin Standard Shader V2 (Translucency Part)" {
 
 		_SSSColor ("Subsurface Color", Color) = (0.95,0.10,0.06,1)
 		_SSSPower ("Translucency Power", Float) = 5
-		_SSSAmb ("Translucency Ambient", Float) = 0.05
+		_SSSAmb ("Translucency Ambient", Range(0,1)) = 0.05
 		_SSSDist ("Translucency Distortion", Float) = 0.5
         _SSSRemapBlack ("Translucency Remap Black", Range(-5,5)) = 0
         _SSSRemapWhite ("Translucency Remap White", Range(-5,5)) = 1
