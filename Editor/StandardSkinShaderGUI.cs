@@ -19,8 +19,10 @@ namespace UnityEditor
             public static GUIContent s_ao_sss = new GUIContent("Thick(R), AO(G), Smooth(B), HairMask(A)");
             public static GUIContent singleMap = new GUIContent("Use Single S/AO/SSS Map");
 
-            public static GUIContent smoothRemapBlack = new GUIContent("Smoothness Remap Black");
-            public static GUIContent smoothRemapWhite = new GUIContent("Smoothness Remap White");
+            public static GUIContent smoothRemapBlack = new GUIContent("Smoothness Detail Remap Black");
+            public static GUIContent smoothRemapWhite = new GUIContent("Smoothness Detail Remap White");
+            public static GUIContent smoothRemapBlackBase = new GUIContent("Smoothness Base Remap Black");
+            public static GUIContent smoothRemapWhiteBase = new GUIContent("Smoothness Base Remap White");
 
             public static GUIContent detailNorm = new GUIContent("Detail Normal Map");
             public static GUIContent detailNormIntensity = new GUIContent("Detail Normal Map Intensity Diffuse");
@@ -56,6 +58,8 @@ namespace UnityEditor
 
         MaterialProperty smoothRemapBlack = null;
         MaterialProperty smoothRemapWhite = null;
+        MaterialProperty smoothRemapBlackBase = null;
+        MaterialProperty smoothRemapWhiteBase = null;
 
         MaterialProperty detailNorm = null;
         MaterialProperty detailNormIntensity = null;
@@ -92,6 +96,8 @@ namespace UnityEditor
 
             smoothRemapBlack = FindProperty("_SmoothnessRemapBlack", props);
             smoothRemapWhite = FindProperty("_SmoothnessRemapWhite", props);
+            smoothRemapBlackBase = FindProperty("_SmoothnessRemapBlackBase", props);
+            smoothRemapWhiteBase = FindProperty("_SmoothnessRemapWhiteBase", props);
 
             detailNorm = FindProperty("_DetailNormalTex", props);
             detailNormIntensity = FindProperty("_DetailNormalMapIntensity", props);
@@ -141,6 +147,8 @@ namespace UnityEditor
             m_MaterialEditor.TexturePropertySingleLine(Styles.s_ao_sss, s_ao_sss); 
 
             m_MaterialEditor.ShaderProperty(aoStr, Styles.aoStr);
+            m_MaterialEditor.ShaderProperty(smoothRemapBlackBase, Styles.smoothRemapBlackBase);
+            m_MaterialEditor.ShaderProperty(smoothRemapWhiteBase, Styles.smoothRemapWhiteBase);
             m_MaterialEditor.ShaderProperty(smoothRemapBlack, Styles.smoothRemapBlack);
             m_MaterialEditor.ShaderProperty(smoothRemapWhite, Styles.smoothRemapWhite);
             m_MaterialEditor.ShaderProperty(sssRemapBlack, Styles.sssRemapBlack);

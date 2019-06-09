@@ -4,8 +4,10 @@ Shader "Skin/Skin Standard Shader V2 (Standard Part)" {
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_NormalTex ("Normal Map", 2D) = "bump" {}
         
-        _SmoothnessRemapBlack ("Smoothness Remap Black", Range(-5,5)) = 0
-        _SmoothnessRemapWhite ("Smoothness Remap White", Range(-5,5)) = 0.7
+        _SmoothnessRemapBlack ("Smoothness Detail Remap Black", Range(-5,5)) = 0
+        _SmoothnessRemapWhite ("Smoothness Detail Remap White", Range(-5,5)) = 0.7
+        _SmoothnessRemapBlackBase ("Smoothness Base Remap Black", Range(-5,5)) = 0
+        _SmoothnessRemapWhiteBase ("Smoothness Base Remap White", Range(-5,5)) = 0
         
         _AOStrength ("Ambient Occlusion Strength", Range(0,1)) = 1
         

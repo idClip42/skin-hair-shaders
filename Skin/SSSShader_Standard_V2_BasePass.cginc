@@ -11,6 +11,8 @@ fixed4 _Color;
 half _DetailNormalMapIntensity;
 half _AOStrength;
 int _DiffuseNormalLod;
+half _SmoothnessRemapBlackBase;
+half _SmoothnessRemapWhiteBase;
 
 void surf (Input IN, inout SurfaceOutputStandard o) {
     fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
@@ -24,4 +26,5 @@ void surf (Input IN, inout SurfaceOutputStandard o) {
     fixed4 mixTex = tex2D (_S_AO_SSS_Tex, IN.uv_MainTex);
     o.Occlusion = lerp(1, mixTex.g, _AOStrength) * mixTex.a;
     o.Metallic = 1 - mixTex.a;
+    o.Smoothness = saturate(lerp(_SmoothnessRemapBlackBase, _SmoothnessRemapWhiteBase, mixTex.b)) * mixTex.a;
 }
