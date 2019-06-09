@@ -12,6 +12,14 @@
         _SpecPower ("Specular Power", Range(0,1)) = 0.1
         _SpecMult ("Specular Multiplier", Float) = 1
         _DitherMotion("Dither Motion", Float) = 10
+        
+        _Translucency("Translucency", 2D) = "black" {}
+        _TMin("Translucency Min", range(-1,1)) = -0.015
+        _TMax("Translucency Max", range(0,2)) = 0.2
+        _TPower ("Translucency Power", Float) = 30
+        _TAmb ("Translucency Ambient", Range(0,1)) = 0.1
+        _TDist ("Translucency Distortion", Float) = 0.2
+        
     }
     SubShader
     {
@@ -33,6 +41,7 @@
         CGPROGRAM
         #pragma surface surf Anisotropic fullforwardshadows
         #pragma target 3.0
+        #include "../Utilities/Translucency.cginc"
         #include "Hair3SpecPass.cginc"
         ENDCG
     }

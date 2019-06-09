@@ -50,7 +50,7 @@ Shader "Skin/Skin Standard Shader V2" {
         CGPROGRAM
         #pragma surface surf SSS fullforwardshadows
         #pragma target 3.0
-        #include "Translucency.cginc"
+        #include "../Utilities/Translucency.cginc"
         #include "SSSShader_Standard_V2_SSSPass.cginc"
         ENDCG
 	}

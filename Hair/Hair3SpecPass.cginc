@@ -8,6 +8,7 @@ struct SurfaceAnisoOutput
     fixed3 Albedo;
     fixed3 Normal;
     fixed3 NormalOrig;
+    fixed Translucency;
     fixed3 Emission;
     fixed Alpha;
 };
@@ -16,6 +17,14 @@ sampler2D _AnisoDir;
 float4 _SpecularColor;
 float _SpecPower;
 float _SpecMult;
+
+sampler2D _Translucency;
+half _TMin;
+half _TMax;
+half _TPower;
+half _TAmb;
+half _TDist;
+
 
 fixed4 LightingAnisotropic(SurfaceAnisoOutput s, fixed3 lightDir, half3 viewDir, fixed atten)
 {
@@ -28,9 +37,13 @@ fixed4 LightingAnisotropic(SurfaceAnisoOutput s, fixed3 lightDir, half3 viewDir,
     half diffuse = 1;
     NdotL = saturate(dot (s.NormalOrig, lightDir));
     diffuse = pow(NdotL, 2);
+    
+    half tLevel = saturate(lerp(_TMin, _TMax, s.Translucency));
+    half translucency = Translucency(s.Normal, lightDir, viewDir, atten, _TPower, _TAmb, _TDist, tLevel);
 
     fixed4 c;
-    c.rgb = _SpecularColor.rgb * spec * atten * diffuse * _SpecMult * s.Alpha;
+    //c.rgb = _SpecularColor.rgb * spec * atten * diffuse * _SpecMult * s.Alpha + translucency * s.Alpha * atten;
+    c.rgb = _SpecularColor.rgb * atten * s.Alpha * (spec * diffuse * _SpecMult + translucency);
     c.a = 1;
     
     return c;
@@ -42,6 +55,9 @@ void surf (Input IN, inout SurfaceAnisoOutput o)
     o.Albedo = (0.5,0,0);
     
     o.NormalOrig = WorldNormalVector (IN, o.Normal);
+    
+    o.Translucency = tex2D (_Translucency, IN.uv_MainTex).r;
+    
     float3 anisoTex = tex2D(_AnisoDir, IN.uv_MainTex);
     o.Normal = anisoTex;
     o.Normal -= 0.5f;
